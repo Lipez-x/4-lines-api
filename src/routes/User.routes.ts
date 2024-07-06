@@ -1,12 +1,10 @@
 import { Router } from "express";
-import {
-  createUser,
-  getAllUsers,
-  getUserById,
-} from "../controllers/UserController";
 import { isValidId } from "../middlewares/isValidObjectId";
+import UserController from "../controllers/UserController";
 export const UserRoutes = Router();
 
-UserRoutes.post("/create", createUser);
-UserRoutes.get("/", getAllUsers);
-UserRoutes.get("/:id", isValidId, getUserById);
+const userController = new UserController();
+
+UserRoutes.post("/create", userController.createUser);
+UserRoutes.get("/", userController.getAllUsers);
+UserRoutes.get("/:id", isValidId, userController.getUserById);
