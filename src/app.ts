@@ -3,7 +3,10 @@ import express from "express";
 import { connection } from "../config/db";
 import { UserRoutes } from "./routes/User.routes";
 const app = express();
+import crypo from "crypto";
 app.use(express.json());
+
+const secret = crypo.randomBytes(32).toString("hex");
 
 app.use("/user/", UserRoutes);
 

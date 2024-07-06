@@ -3,6 +3,15 @@ import { UserInterface } from "../interfaces/User";
 import { StatusCodes } from "http-status-codes";
 import { User } from "../models/User";
 import * as bcrypt from "bcryptjs";
+import { Login } from "../interfaces/Login.interface";
+import * as jwt from "jsonwebtoken";
+import { config } from "dotenv";
+import c from "config";
+config();
+
+async function verifyUserByEmail(email: string) {
+  const user = await User.findOne({ email: email });
+}
 
 function verifyUserData({ username, email, password }: UserInterface) {
   if (!username) {
@@ -16,6 +25,53 @@ function verifyUserData({ username, email, password }: UserInterface) {
   }
 }
 export default class UserController {
+  async login(req: Request, res: Response) {
+    const { email, password }: Login = req.body;
+
+    if (!email || !password) {
+      return res
+        .status(StatusCodes.UNPROCESSABLE_ENTITY)
+        .json({ msg: "Email and password are required" });
+    }
+
+    const user = await User.findOne({ email: email });
+
+    if (!user) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ msg: "User is not found" });
+    }
+
+    const comparePassword = await bcrypt.compare(password, user.password);
+
+    if (!comparePassword) {
+      return res
+        .status(StatusCodes.UNAUTHORIZED)
+        .json({ msg: "Invalid password" });
+    }
+
+    try {
+      const secret = c.get<string>("secret");
+      const options: jwt.SignOptions = {
+        expiresIn: "1d",
+      };
+      const token = jwt.sign(
+        { username: user.username, email: user.email, password: user.password },
+        secret,
+        options
+      );
+      res.status(StatusCodes.OK).json({
+        jwt_token: token,
+      });
+    } catch (error) {
+      console.log(error);
+
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ msg: "Failed to login" });
+    }
+  }
+
   async createUser(req: Request, res: Response) {
     const user: UserInterface = req.body;
     const confirmPassword = req.body.confirmPassword;
