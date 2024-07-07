@@ -7,6 +7,9 @@ import { Login } from "../interfaces/Login.interface";
 import * as jwt from "jsonwebtoken";
 import { config } from "dotenv";
 import c from "config";
+import { getUserByToken } from "../helpers/get-user-token";
+import { getToken } from "../helpers/get-jwt-token";
+import { userInfo } from "os";
 config();
 
 async function verifyUserByEmail(email: string) {
@@ -74,7 +77,7 @@ export default class UserController {
 
   async createUser(req: Request, res: Response) {
     const user: UserInterface = req.body;
-    const confirmPassword = req.body.confirmPassword;
+    const confirmPassword: string = req.body.confirmPassword;
     const emailExists = await User.findOne({ email: user.email });
 
     const verifyData = verifyUserData(user);
@@ -144,6 +147,57 @@ export default class UserController {
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ msg: "Failed to load user" });
+    }
+  }
+
+  async update(req: Request, res: Response) {
+    const id = req.params.id;
+    const data: UserInterface = req.body;
+    const confirmPassword: string = req.body.confirmPassword;
+
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(StatusCodes.NOT_FOUND).json({ msg: "User not found" });
+    }
+
+    const verifyData = verifyUserData(data);
+
+    if (verifyData) {
+      return res
+        .status(StatusCodes.UNPROCESSABLE_ENTITY)
+        .json({ msg: verifyData.message });
+    }
+
+    const emailExists = await User.findOne({ email: data.email });
+
+    if (emailExists && emailExists.email !== user.email) {
+      return res
+        .status(StatusCodes.CONFLICT)
+        .json({ msg: "This email is already in use" });
+    }
+    if (data.password !== confirmPassword) {
+      return res
+        .status(StatusCodes.CONFLICT)
+        .json({ msg: "Passwords are not the same" });
+    }
+
+    try {
+      const salt = await bcrypt.genSalt(12);
+      const hashedPassword = await bcrypt.hash(data.password, salt);
+      const updateUser = {
+        ...data,
+        password: hashedPassword,
+      };
+
+      await User.findByIdAndUpdate(id, updateUser);
+      return res
+        .status(StatusCodes.OK)
+        .json({ msg: "User updated successfully" });
+    } catch (error) {
+      return res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ msg: "Failed to updated user" });
     }
   }
 }

@@ -10,3 +10,4 @@ UserRoutes.post("/login", userController.login);
 UserRoutes.post("/create", userController.createUser);
 UserRoutes.get("/", verifyToken, userController.getAllUsers);
 UserRoutes.get("/:id", verifyToken, isValidId, userController.getUserById);
+UserRoutes.put("/update/:id", userController.update);
