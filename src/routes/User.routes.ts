@@ -1,12 +1,12 @@
 import { Router } from "express";
 import { isValidId } from "../middlewares/isValidObjectId";
 import UserController from "../controllers/UserController";
-import { User } from "../models/User";
+import { verifyToken } from "../middlewares/verifyToken";
 export const UserRoutes = Router();
 
 const userController = new UserController();
 
 UserRoutes.post("/login", userController.login);
 UserRoutes.post("/create", userController.createUser);
-UserRoutes.get("/", userController.getAllUsers);
-UserRoutes.get("/:id", isValidId, userController.getUserById);
+UserRoutes.get("/", verifyToken, userController.getAllUsers);
+UserRoutes.get("/:id", verifyToken, isValidId, userController.getUserById);
