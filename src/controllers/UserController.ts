@@ -200,4 +200,24 @@ export default class UserController {
         .json({ msg: "Failed to updated user" });
     }
   }
+
+  async delete(req: Request, res: Response) {
+    const id = req.params.id;
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(StatusCodes.NOT_FOUND).json({ msg: "User not found" });
+    }
+
+    try {
+      await User.findByIdAndDelete(id);
+      return res
+        .status(StatusCodes.OK)
+        .json({ msg: "User deleted with successfully" });
+    } catch (error) {
+      return res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ msg: "Failed to delete user" });
+    }
+  }
 }

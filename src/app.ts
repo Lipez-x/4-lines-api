@@ -13,8 +13,6 @@ app.use("/user/", UserRoutes);
 const port = c.get<number>("port");
 
 app.listen(port, () => {
-  console.log(secret);
-
   console.log(`Aplicação rodando na porta ${port}`);
   connection();
 });
