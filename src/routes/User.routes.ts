@@ -2,7 +2,6 @@ import { Router } from "express";
 import { isValidId } from "../middlewares/isValidObjectId";
 import UserController from "../controllers/UserController";
 import { verifyToken } from "../middlewares/verifyToken";
-import { User } from "../models/User";
 export const UserRoutes = Router();
 
 const userController = new UserController();
