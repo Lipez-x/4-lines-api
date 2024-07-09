@@ -4,18 +4,17 @@ import * as jwt from "jsonwebtoken";
 import { UserInterface } from "../interfaces/User";
 import { ObjectId } from "mongoose";
 import { User } from "../models/User";
+import { UserPayload } from "../interfaces/UserPayload";
 
-export const getUserByToken = async (token: string) => {
-  if (!token) {
-    return new Error("Access denied");
-  }
-
+export const GetUserByToken = async (token: string) => {
   const secret = c.get<string>("secret");
-  const decoded = jwt.verify(token, secret) as UserInterface;
+  const decoded = jwt.verify(token, secret) as UserPayload;
 
-  const id: ObjectId = decoded.id;
+  const id = decoded._id;
 
-  const user = await User.findById(id).select("-password -__v");
+  const user = (await User.findById(id).select(
+    "-password -__v"
+  )) as UserPayload;
 
   return user;
 };

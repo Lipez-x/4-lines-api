@@ -7,9 +7,9 @@ import { Login } from "../interfaces/Login.interface";
 import * as jwt from "jsonwebtoken";
 import { config } from "dotenv";
 import c from "config";
-import { getUserByToken } from "../helpers/get-user-token";
-import { getToken } from "../helpers/get-jwt-token";
-import { userInfo } from "os";
+import { GetToken } from "../helpers/get-jwt-token";
+import { GetUserByToken } from "../helpers/get-user-token";
+
 config();
 
 async function verifyUserByEmail(email: string) {
@@ -59,7 +59,12 @@ export default class UserController {
         expiresIn: "1d",
       };
       const token = jwt.sign(
-        { username: user.username, email: user.email, password: user.password },
+        {
+          _id: user._id,
+          username: user.username,
+          email: user.email,
+          password: user.password,
+        },
         secret,
         options
       );
@@ -170,8 +175,16 @@ export default class UserController {
     }
 
     const emailExists = await User.findOne({ email: data.email });
+    const token = GetToken(req);
+    const getUserByToken = await GetUserByToken(token);
 
-    if (emailExists && emailExists.email !== user.email) {
+    if (!getUserByToken || getUserByToken.id !== user.id) {
+      return res
+        .status(StatusCodes.FORBIDDEN)
+        .json({ msg: "You don't have access" });
+    }
+
+    if (emailExists && emailExists.email !== getUserByToken.email) {
       return res
         .status(StatusCodes.CONFLICT)
         .json({ msg: "This email is already in use" });
@@ -207,6 +220,15 @@ export default class UserController {
 
     if (!user) {
       return res.status(StatusCodes.NOT_FOUND).json({ msg: "User not found" });
+    }
+
+    const token = GetToken(req);
+    const getUserByToken = await GetUserByToken(token);
+
+    if (!getUserByToken || getUserByToken.id !== user.id) {
+      return res
+        .status(StatusCodes.FORBIDDEN)
+        .json({ msg: "You don't have access" });
     }
 
     try {
