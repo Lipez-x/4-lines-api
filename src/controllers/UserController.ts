@@ -9,7 +9,7 @@ import { config } from "dotenv";
 import c from "config";
 import { GetToken } from "../helpers/get-jwt-token";
 import { GetUserByToken } from "../helpers/get-user-token";
-import { ObjectId } from "mongoose";
+
 config();
 
 async function verifyUserByEmail(email: string) {
@@ -59,7 +59,12 @@ export default class UserController {
         expiresIn: "1d",
       };
       const token = jwt.sign(
-        { username: user.username, email: user.email, password: user.password },
+        {
+          _id: user._id,
+          username: user.username,
+          email: user.email,
+          password: user.password,
+        },
         secret,
         options
       );
@@ -173,7 +178,7 @@ export default class UserController {
     const token = GetToken(req);
     const getUserByToken = await GetUserByToken(token);
 
-    if (!getUserByToken || getUserByToken.email !== user.email) {
+    if (!getUserByToken || getUserByToken.id !== user.id) {
       return res
         .status(StatusCodes.FORBIDDEN)
         .json({ msg: "You don't have access" });
@@ -220,7 +225,7 @@ export default class UserController {
     const token = GetToken(req);
     const getUserByToken = await GetUserByToken(token);
 
-    if (!getUserByToken || getUserByToken.email !== user.email) {
+    if (!getUserByToken || getUserByToken.id !== user.id) {
       return res
         .status(StatusCodes.FORBIDDEN)
         .json({ msg: "You don't have access" });
