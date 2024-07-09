@@ -7,7 +7,9 @@ const ArenaSchema = new Schema(
     address: { type: Schema.Types.String, required: true },
     price: { type: Schema.Types.Number, required: true },
     description: { type: Schema.Types.String, required: true },
-    hours: { type: Schema.Types.Array },
+    schedule: { type: Schema.Types.Array, required: true },
+    owner: { type: Object, required: true },
+    lessee: { type: Object },
   },
   {
     timestamps: true,
