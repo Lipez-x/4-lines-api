@@ -47,7 +47,9 @@ export default class ArenaController {
 
     try {
       const token = GetToken(req);
-      const user = GetUserByToken(token);
+      const user = await GetUserByToken(token);
+
+      console.log(user);
 
       const arena = new Arena({
         ...data,
@@ -78,3 +80,5 @@ export default class ArenaController {
     }
   }
 }
+
+// Bug nos horários, tá recebendo qualquer string
