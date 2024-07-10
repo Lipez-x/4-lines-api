@@ -4,6 +4,8 @@ import { StatusCodes } from "http-status-codes";
 import { GetToken } from "../helpers/get-jwt-token";
 import { GetUserByToken } from "../helpers/get-user-token";
 import { Arena } from "../models/Arena";
+import { isDate } from "util/types";
+import moment from "moment";
 
 function verifyArenaData({
   name,
@@ -45,11 +47,27 @@ export default class ArenaController {
         .json({ msg: verifyData.message });
     }
 
+    const isValidDate = (date: string) => {
+      return moment(date, moment.ISO_8601, true).isValid();
+    };
+
+    const verifyHours = data.schedule.map((schedule) => {
+      const validDate = isValidDate(schedule.hour);
+      if (!validDate) {
+        return false;
+      }
+      return true;
+    });
+
+    if (verifyHours.includes(false)) {
+      return res
+        .status(StatusCodes.CONFLICT)
+        .json({ msg: "The time needs to be a date" });
+    }
+
     try {
       const token = GetToken(req);
       const user = await GetUserByToken(token);
-
-      console.log(user);
 
       const arena = new Arena({
         ...data,
@@ -61,11 +79,7 @@ export default class ArenaController {
         .status(StatusCodes.CREATED)
         .json({ msg: "Arena created with successfully" });
     } catch (error) {
-      console.log(error);
-
-      return res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ msg: "Failed to create user" });
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ msg: error });
     }
   }
 

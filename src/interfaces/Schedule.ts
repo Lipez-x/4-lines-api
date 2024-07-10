@@ -1,4 +1,4 @@
 export default interface Schedule {
-  hour: Date;
+  hour: string;
   available: boolean;
 }
