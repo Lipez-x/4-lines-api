@@ -4,7 +4,6 @@ import { StatusCodes } from "http-status-codes";
 import { GetToken } from "../helpers/get-jwt-token";
 import { GetUserByToken } from "../helpers/get-user-token";
 import { Arena } from "../models/Arena";
-import { isDate } from "util/types";
 import moment from "moment";
 
 function verifyArenaData({
@@ -93,6 +92,22 @@ export default class ArenaController {
         .json({ msg: "Failed to load arenas" });
     }
   }
-}
 
-// Bug nos horários, tá recebendo qualquer string
+  async getById(req: Request, res: Response) {
+    try {
+      const id = req.params.id;
+      const arena = await Arena.findById(id);
+
+      if (!arena) {
+        return res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ msg: "Arena not found" });
+      }
+      return res.status(StatusCodes.OK).json(arena);
+    } catch (error) {
+      return res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ msg: "Failed to load arena" });
+    }
+  }
+}
