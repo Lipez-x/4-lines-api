@@ -7,10 +7,8 @@ import crypo from "crypto";
 import { ArenaRoutes } from "./routes/Arena.routes";
 app.use(express.json());
 
-const secret = crypo.randomBytes(32).toString("hex");
-
 app.use("/user/", UserRoutes);
-app.use("/arena", ArenaRoutes);
+app.use("/arena/", ArenaRoutes);
 
 const port = c.get<number>("port");
 

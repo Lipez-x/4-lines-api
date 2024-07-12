@@ -1,7 +1,7 @@
 import c from "config";
 import { config, decrypt } from "dotenv";
 import * as jwt from "jsonwebtoken";
-import { UserInterface } from "../interfaces/User";
+import { UserInterface } from "../interfaces/UserInterface";
 import { ObjectId } from "mongoose";
 import { User } from "../models/User";
 import { UserPayload } from "../interfaces/UserPayload";

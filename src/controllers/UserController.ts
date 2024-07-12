@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { UserInterface } from "../interfaces/User";
+import { UserInterface } from "../interfaces/UserInterface";
 import { StatusCodes } from "http-status-codes";
 import { User } from "../models/User";
 import * as bcrypt from "bcryptjs";
