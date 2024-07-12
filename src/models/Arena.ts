@@ -5,6 +5,14 @@ const ScheduleSchema = new Schema({
   available: { type: Schema.Types.Boolean, required: true },
 });
 
+// const UserSchema = new Schema({
+//   _id: { type: String, required: true },
+//   username: { type: String, required: true },
+//   email: { type: String, required: true },
+//   createdAt: { type: Date, required: true },
+//   updatedAt: { type: Date, required: true },
+// });
+
 const ArenaSchema = new Schema(
   {
     name: { type: Schema.Types.String, required: true },

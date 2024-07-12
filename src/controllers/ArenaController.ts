@@ -5,6 +5,7 @@ import { GetToken } from "../helpers/get-jwt-token";
 import { GetUserByToken } from "../helpers/get-user-token";
 import { Arena } from "../models/Arena";
 import moment from "moment";
+import { UserPayload } from "../interfaces/UserPayload";
 
 function verifyArenaData({
   name,
@@ -108,6 +109,24 @@ export default class ArenaController {
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ msg: "Failed to load arena" });
+    }
+  }
+
+  async getAllUserArenas(req: Request, res: Response) {
+    const token = GetToken(req);
+    const user = await GetUserByToken(token);
+
+    if (!user) {
+      return res.status(StatusCodes.NOT_FOUND).json({ msg: "User not found" });
+    }
+
+    try {
+      const arenas = await Arena.find({ "owner._id": user._id });
+      return res.status(StatusCodes.OK).json(arenas);
+    } catch (error) {
+      return res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ msg: "Failed to load arenas" });
     }
   }
 }
