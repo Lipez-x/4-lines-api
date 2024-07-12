@@ -6,6 +6,7 @@ import { GetUserByToken } from "../helpers/get-user-token";
 import { Arena } from "../models/Arena";
 import moment from "moment";
 import { UserPayload } from "../interfaces/UserPayload";
+import { User } from "../models/User";
 
 function verifyArenaData({
   name,
@@ -127,6 +128,65 @@ export default class ArenaController {
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ msg: "Failed to load arenas" });
+    }
+  }
+
+  async update(req: Request, res: Response) {
+    const id = req.params.id;
+    const data: ArenaInterface = req.body;
+
+    const verifyData = verifyArenaData(data);
+
+    if (verifyData) {
+      return res
+        .status(StatusCodes.UNPROCESSABLE_ENTITY)
+        .json({ msg: verifyData.message });
+    }
+
+    const arena = await Arena.findById(id);
+
+    if (!arena) {
+      return res.status(StatusCodes.NOT_FOUND).json({ msg: "Arena not found" });
+    }
+
+    const isValidDate = (date: string) => {
+      return moment(date, moment.ISO_8601, true).isValid();
+    };
+
+    const verifyHours = data.schedule.map((schedule) => {
+      return isValidDate(schedule.hour);
+    });
+
+    if (verifyHours.includes(false)) {
+      return res
+        .status(StatusCodes.CONFLICT)
+        .json({ msg: "The time needs to be a date" });
+    }
+
+    try {
+      const token = GetToken(req);
+      const user = await GetUserByToken(token);
+
+      const owner = await User.findById(arena.owner._id);
+      if (user.id !== owner?.id) {
+        return res
+          .status(StatusCodes.FORBIDDEN)
+          .json({ msg: "You don't have access" });
+      }
+
+      const arenaUpdate = {
+        ...data,
+        owner: user,
+      };
+
+      await Arena.findByIdAndUpdate(id, arenaUpdate);
+      return res
+        .status(StatusCodes.OK)
+        .json({ msg: "Arena updated successfully" });
+    } catch (error) {
+      return res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ msg: "Failed to update arena" });
     }
   }
 }
