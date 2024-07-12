@@ -2,7 +2,6 @@ import { Router } from "express";
 import ArenaController from "../controllers/ArenaController";
 import { verifyToken } from "../middlewares/verifyToken";
 import { isValidId } from "../middlewares/isValidObjectId";
-import { Arena } from "../models/Arena";
 
 export const ArenaRoutes = Router();
 
@@ -17,6 +16,12 @@ ArenaRoutes.put(
   verifyToken,
   isValidId,
   arenaController.requestRent
+);
+ArenaRoutes.put(
+  "/accept/:id/:hourId",
+  verifyToken,
+  isValidId,
+  arenaController.acceptRequest
 );
 ArenaRoutes.put("/update/:id", verifyToken, isValidId, arenaController.update);
 ArenaRoutes.delete(
