@@ -168,6 +168,7 @@ export default class ArenaController {
       const user = await GetUserByToken(token);
 
       const owner = await User.findById(arena.owner._id);
+
       if (user.id !== owner?.id) {
         return res
           .status(StatusCodes.FORBIDDEN)
@@ -187,6 +188,36 @@ export default class ArenaController {
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ msg: "Failed to update arena" });
+    }
+  }
+
+  async delete(req: Request, res: Response) {
+    const id = req.params.id;
+    const arena = await Arena.findById(id);
+
+    if (!arena) {
+      return res.status(StatusCodes.NOT_FOUND).json({ msg: "Arena not found" });
+    }
+
+    try {
+      const token = GetToken(req);
+      const user = await GetUserByToken(token);
+      const owner = await User.findById(arena.owner._id);
+
+      if (user.id !== owner?.id) {
+        return res
+          .status(StatusCodes.FORBIDDEN)
+          .json({ msg: "You don't have access" });
+      }
+
+      await Arena.findByIdAndDelete(id);
+      return res
+        .status(StatusCodes.OK)
+        .json({ msg: "Arena successfully deleted" });
+    } catch (error) {
+      return res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ msg: "Failed to delete arena" });
     }
   }
 }
