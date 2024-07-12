@@ -131,6 +131,48 @@ export default class ArenaController {
     }
   }
 
+  async requestRent(req: Request, res: Response) {
+    const id = req.params.id;
+    const hourId = req.params.hourId;
+
+    const arena = await Arena.findById(id);
+
+    if (!arena) {
+      return res.status(StatusCodes.NOT_FOUND).json({ msg: "Arena not found" });
+    }
+
+    try {
+      const token = GetToken(req);
+      const user = await GetUserByToken(token);
+
+      const newSchedule = arena.schedule.map((schedule) => {
+        if (schedule.id === hourId) {
+          schedule.lessee = user;
+          return true;
+        }
+        return false;
+      });
+
+      if (!newSchedule.includes(true)) {
+        return res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ msg: "Schedule hour is not found" });
+      }
+
+      const arenaUpdate = {
+        ...arena,
+        schedule: newSchedule,
+      };
+
+      await Arena.findByIdAndUpdate(id, arenaUpdate);
+      return res.status(StatusCodes.OK).json({ msg: "Request sent" });
+    } catch (error) {
+      return res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ msg: "Failed to request rent" });
+    }
+  }
+
   async update(req: Request, res: Response) {
     const id = req.params.id;
     const data: ArenaInterface = req.body;

@@ -1,21 +1,17 @@
 import { model, Schema } from "mongoose";
 
-const ScheduleSchema = new Schema(
-  {
-    hour: { type: Schema.Types.Date, required: true },
-    available: { type: Schema.Types.Boolean, required: true },
-  },
-  {
-    _id: false,
-  }
-);
-
 const UserSchema = new Schema({
   _id: { type: Schema.Types.ObjectId, required: true },
   username: { type: Schema.Types.String, required: true },
   email: { type: Schema.Types.String, required: true },
   createdAt: { type: Schema.Types.Date, required: true },
-  updatedAt: { type: Schema.Types.Date, required: true },
+  updatedAt: { type: Schema.Types.Date },
+});
+
+const ScheduleSchema = new Schema({
+  hour: { type: Schema.Types.Date, required: true },
+  available: { type: Schema.Types.Boolean, required: true },
+  lessee: { type: UserSchema, required: true },
 });
 
 const ArenaSchema = new Schema(
@@ -27,7 +23,6 @@ const ArenaSchema = new Schema(
     description: { type: Schema.Types.String, required: true },
     schedule: { type: [ScheduleSchema] },
     owner: { type: UserSchema, required: true },
-    lessee: { type: UserSchema },
   },
   {
     timestamps: true,
