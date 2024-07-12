@@ -1,17 +1,14 @@
 import { model, Schema } from "mongoose";
 
-const ScheduleSchema = new Schema({
-  hour: { type: Schema.Types.Date, required: true },
-  available: { type: Schema.Types.Boolean, required: true },
-});
-
-// const UserSchema = new Schema({
-//   _id: { type: String, required: true },
-//   username: { type: String, required: true },
-//   email: { type: String, required: true },
-//   createdAt: { type: Date, required: true },
-//   updatedAt: { type: Date, required: true },
-// });
+const ScheduleSchema = new Schema(
+  {
+    hour: { type: Schema.Types.Date, required: true },
+    available: { type: Schema.Types.Boolean, required: true },
+  },
+  {
+    _id: false,
+  }
+);
 
 const ArenaSchema = new Schema(
   {
