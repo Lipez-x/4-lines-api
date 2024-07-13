@@ -23,6 +23,12 @@ ArenaRoutes.put(
   isValidId,
   arenaController.acceptRequest
 );
+ArenaRoutes.put(
+  "/complete/:id/:hourId",
+  verifyToken,
+  isValidId,
+  arenaController.completeRental
+);
 ArenaRoutes.put("/update/:id", verifyToken, isValidId, arenaController.update);
 ArenaRoutes.delete(
   "/delete/:id",
