@@ -18,7 +18,7 @@ ArenaRoutes.put(
   arenaController.requestRent
 );
 ArenaRoutes.put(
-  "/accept/:id/:hourId",
+  "/accept/:id/:hourId/:lesseeId",
   verifyToken,
   isValidId,
   arenaController.acceptRequest

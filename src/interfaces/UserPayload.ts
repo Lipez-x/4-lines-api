@@ -5,7 +5,6 @@ export interface UserPayload extends JwtPayload {
   _id: Types.ObjectId;
   username: string;
   email: string;
-  password: string;
   createdAt: Date;
   updatedAt: Date;
 }

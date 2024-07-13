@@ -6,6 +6,8 @@ import { GetUserByToken } from "../helpers/get-user-token";
 import { Arena } from "../models/Arena";
 import moment from "moment";
 import { User } from "../models/User";
+import { Types } from "mongoose";
+import { UserPayload } from "../interfaces/UserPayload";
 
 function verifyArenaData({
   name,
@@ -142,11 +144,16 @@ export default class ArenaController {
 
     try {
       const token = GetToken(req);
-      const user = await GetUserByToken(token);
+      const userByToken = await GetUserByToken(token);
+
+      const user = new User(userByToken);
 
       const newSchedule = arena.schedule.map((schedule) => {
-        if (schedule.id === hourId) {
-          schedule.lessee = user;
+        if (
+          schedule.id === hourId &&
+          !schedule.lessee.some((lessee) => lessee._id.equals(user._id))
+        ) {
+          schedule.lessee.push(user);
           return true;
         }
         return false;
@@ -155,7 +162,7 @@ export default class ArenaController {
       if (!newSchedule.includes(true)) {
         return res
           .status(StatusCodes.NOT_FOUND)
-          .json({ msg: "Schedule hour is not found" });
+          .json({ msg: "Schedule is not found" });
       }
 
       const arenaUpdate = {
@@ -175,6 +182,7 @@ export default class ArenaController {
   async acceptRequest(req: Request, res: Response) {
     const id = req.params.id;
     const hourdId = req.params.hourId;
+    const lesseeId = req.params.lesseeId;
 
     const arena = await Arena.findById(id);
 
@@ -196,6 +204,14 @@ export default class ArenaController {
       const acceptHour = arena.schedule.map((schedule) => {
         if (schedule.id === hourdId) {
           schedule.available = false;
+          const lesseeAccepted = schedule.lessee.filter(
+            (lessee) => lessee.id === lesseeId
+          );
+
+          if (lesseeAccepted.length === 0) {
+            return false;
+          }
+          schedule.lessee = lesseeAccepted as Types.DocumentArray<UserPayload>;
           return true;
         }
         return false;
@@ -204,7 +220,7 @@ export default class ArenaController {
       if (!acceptHour.includes(true)) {
         return res
           .status(StatusCodes.NOT_FOUND)
-          .json({ msg: "Schedule hour is not found" });
+          .json({ msg: "Schedule is not found" });
       }
 
       const arenaUpdate = {
@@ -249,7 +265,7 @@ export default class ArenaController {
       const verifySchema = arena.schedule.map((schedule) => {
         if (schedule.id === hourdId) {
           schedule.available = true;
-          schedule.lessee = undefined;
+          schedule.lessee.length = 0;
           return true;
         }
         return false;
@@ -258,7 +274,7 @@ export default class ArenaController {
       if (!verifySchema.includes(true)) {
         return res
           .status(StatusCodes.NOT_FOUND)
-          .json({ msg: "Schedule hour is not found" });
+          .json({ msg: "Schedule is not found" });
       }
 
       const updateArena = {
