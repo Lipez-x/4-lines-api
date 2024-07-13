@@ -6,6 +6,8 @@ import { GetUserByToken } from "../helpers/get-user-token";
 import { Arena } from "../models/Arena";
 import moment from "moment";
 import { User } from "../models/User";
+import { Types } from "mongoose";
+import { UserPayload } from "../interfaces/UserPayload";
 
 function verifyArenaData({
   name,
@@ -175,6 +177,7 @@ export default class ArenaController {
   async acceptRequest(req: Request, res: Response) {
     const id = req.params.id;
     const hourdId = req.params.hourId;
+    const lesseeId = req.params.lesseeId;
 
     const arena = await Arena.findById(id);
 
@@ -196,6 +199,11 @@ export default class ArenaController {
       const acceptHour = arena.schedule.map((schedule) => {
         if (schedule.id === hourdId) {
           schedule.available = false;
+          const lesseeAccepted = schedule.lessee.filter(
+            (lessee) => lessee.id === lesseeId
+          );
+          schedule.lessee = lesseeAccepted as Types.DocumentArray<UserPayload>;
+
           return true;
         }
         return false;

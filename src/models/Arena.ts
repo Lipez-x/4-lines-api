@@ -11,7 +11,7 @@ const UserSchema = new Schema({
 const ScheduleSchema = new Schema({
   hour: { type: Schema.Types.Date, required: true },
   available: { type: Schema.Types.Boolean, required: true },
-  lessee: { type: [UserSchema] },
+  lessee: { type: [UserSchema], default: [] },
 });
 
 const ArenaSchema = new Schema(
