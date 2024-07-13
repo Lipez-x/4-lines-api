@@ -146,7 +146,7 @@ export default class ArenaController {
 
       const newSchedule = arena.schedule.map((schedule) => {
         if (schedule.id === hourId) {
-          schedule.lessee = user;
+          schedule.lessee.push(user);
           return true;
         }
         return false;
@@ -249,7 +249,7 @@ export default class ArenaController {
       const verifySchema = arena.schedule.map((schedule) => {
         if (schedule.id === hourdId) {
           schedule.available = true;
-          schedule.lessee = undefined;
+          schedule.lessee.length = 0;
           return true;
         }
         return false;
