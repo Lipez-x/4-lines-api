@@ -144,10 +144,15 @@ export default class ArenaController {
 
     try {
       const token = GetToken(req);
-      const user = await GetUserByToken(token);
+      const userByToken = await GetUserByToken(token);
+
+      const user = new User(userByToken);
 
       const newSchedule = arena.schedule.map((schedule) => {
-        if (schedule.id === hourId) {
+        if (
+          schedule.id === hourId &&
+          !schedule.lessee.some((lessee) => lessee._id.equals(user._id))
+        ) {
           schedule.lessee.push(user);
           return true;
         }
@@ -157,7 +162,7 @@ export default class ArenaController {
       if (!newSchedule.includes(true)) {
         return res
           .status(StatusCodes.NOT_FOUND)
-          .json({ msg: "Schedule hour is not found" });
+          .json({ msg: "Schedule is not found" });
       }
 
       const arenaUpdate = {
@@ -202,8 +207,11 @@ export default class ArenaController {
           const lesseeAccepted = schedule.lessee.filter(
             (lessee) => lessee.id === lesseeId
           );
-          schedule.lessee = lesseeAccepted as Types.DocumentArray<UserPayload>;
 
+          if (lesseeAccepted.length === 0) {
+            return false;
+          }
+          schedule.lessee = lesseeAccepted as Types.DocumentArray<UserPayload>;
           return true;
         }
         return false;
@@ -212,7 +220,7 @@ export default class ArenaController {
       if (!acceptHour.includes(true)) {
         return res
           .status(StatusCodes.NOT_FOUND)
-          .json({ msg: "Schedule hour is not found" });
+          .json({ msg: "Schedule is not found" });
       }
 
       const arenaUpdate = {
@@ -266,7 +274,7 @@ export default class ArenaController {
       if (!verifySchema.includes(true)) {
         return res
           .status(StatusCodes.NOT_FOUND)
-          .json({ msg: "Schedule hour is not found" });
+          .json({ msg: "Schedule is not found" });
       }
 
       const updateArena = {
