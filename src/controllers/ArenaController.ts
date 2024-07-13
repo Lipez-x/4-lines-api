@@ -5,7 +5,6 @@ import { GetToken } from "../helpers/get-jwt-token";
 import { GetUserByToken } from "../helpers/get-user-token";
 import { Arena } from "../models/Arena";
 import moment from "moment";
-import { UserPayload } from "../interfaces/UserPayload";
 import { User } from "../models/User";
 
 function verifyArenaData({
@@ -170,6 +169,111 @@ export default class ArenaController {
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ msg: "Failed to request rent" });
+    }
+  }
+
+  async acceptRequest(req: Request, res: Response) {
+    const id = req.params.id;
+    const hourdId = req.params.hourId;
+
+    const arena = await Arena.findById(id);
+
+    if (!arena) {
+      return res.status(StatusCodes.NOT_FOUND).json({ msg: "Arena not found" });
+    }
+
+    const token = GetToken(req);
+    const user = await GetUserByToken(token);
+
+    const owner = await User.findById(arena.owner._id);
+    if (user.id !== owner?.id) {
+      return res
+        .status(StatusCodes.FORBIDDEN)
+        .json({ msg: "You don't have access" });
+    }
+
+    try {
+      const acceptHour = arena.schedule.map((schedule) => {
+        if (schedule.id === hourdId) {
+          schedule.available = false;
+          return true;
+        }
+        return false;
+      });
+
+      if (!acceptHour.includes(true)) {
+        return res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ msg: "Schedule hour is not found" });
+      }
+
+      const arenaUpdate = {
+        ...arena,
+        schedule: acceptHour,
+      };
+
+      await Arena.findByIdAndUpdate(id, arenaUpdate);
+
+      return res
+        .status(StatusCodes.OK)
+        .json({ msg: "Request successfully accepted" });
+    } catch (error) {
+      return res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ msg: "Failed to accept request" });
+    }
+  }
+
+  async completeRental(req: Request, res: Response) {
+    const id = req.params.id;
+    const hourdId = req.params.hourId;
+
+    const arena = await Arena.findById(id);
+
+    if (!arena) {
+      return res.status(StatusCodes.NOT_FOUND).json({ msg: "Arena not foun" });
+    }
+
+    const token = GetToken(req);
+    const user = await GetUserByToken(token);
+
+    const owner = await User.findById(arena.owner._id);
+
+    if (user.id !== owner?.id) {
+      return res
+        .status(StatusCodes.FORBIDDEN)
+        .json({ msg: "You don't have access" });
+    }
+
+    try {
+      const verifySchema = arena.schedule.map((schedule) => {
+        if (schedule.id === hourdId) {
+          schedule.available = true;
+          schedule.lessee = undefined;
+          return true;
+        }
+        return false;
+      });
+
+      if (!verifySchema.includes(true)) {
+        return res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ msg: "Schedule hour is not found" });
+      }
+
+      const updateArena = {
+        ...arena,
+        schedule: verifySchema,
+      };
+
+      await Arena.findByIdAndUpdate(id, updateArena);
+      return res
+        .status(StatusCodes.OK)
+        .json({ msg: "Rental completed successfully" });
+    } catch (error) {
+      return res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ msg: "Failed to complete " });
     }
   }
 
