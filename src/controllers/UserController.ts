@@ -12,10 +12,6 @@ import { GetUserByToken } from "../helpers/get-user-token";
 
 config();
 
-async function verifyUserByEmail(email: string) {
-  const user = await User.findOne({ email: email });
-}
-
 function verifyUserData({ username, email, password }: UserInterface) {
   if (!username) {
     return new Error("Username is mandatory");
