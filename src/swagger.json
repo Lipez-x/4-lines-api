@@ -1,0 +1,384 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "4 Lines API",
+    "description": "Esta API foi desenvolvida para otimizar e facilitar o processo de agendamento de arenas esportivas. Ela atende tanto aos proprietários das arenas quanto aos clientes interessados, proporcionando uma experiência mais eficiente e prática para ambas as partes.",
+    "contact": {
+      "email": "ifelipelima.dev@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/",
+      "description": "API Test"
+    }
+  ],
+  "paths": {
+    "/user/create": {
+      "post": {
+        "summary": "Cadastro de usuário",
+        "description": "Rota para o o usuário se cadastrar no sistema",
+        "tags": ["User"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "username": { "type": "string" },
+                  "email": { "type": "string" },
+                  "password": { "type": "string" },
+                  "confirmPassword": { "type": "string" }
+                }
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "username": "Messi",
+                    "email": "messi@intermiami.com",
+                    "password": "goat123",
+                    "confirmPassword": "goat123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "422": {
+            "description": "Username, Email ou Senha não foram infromados"
+          },
+          "409": {
+            "description": "O email já está em uso ou a senha não é a mesma"
+          },
+          "201": { "description": "Usuário criado com sucesso" },
+          "500": { "description": "Erro interno do servidor" }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "summary": "Login",
+        "description": "Rota para gerar o token de autentificação JWT",
+        "tags": ["User"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string" },
+                  "password": { "type": "string" }
+                }
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "email": "messi@intermiami.com",
+                    "password": "goat123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "jwt_token": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "409": { "description": "Email ou senha não foram informados." },
+          "404": { "description": "Usuário não encontrado" },
+          "401": { "description": "Senha inválida" },
+          "500": { "description": "Erro interno do servidor" }
+        }
+      }
+    },
+    "/user/{id}": {
+      "get": {
+        "summary": "Procurar usuário por ID",
+        "description": "Rota para buscar usuários utilizando o ID",
+        "tags": ["User"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do usuário",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": { "description": "Usuário não encontrado" },
+          "401": { "description": "Token inválido" },
+          "500": { "description": "Erro interno do servidor" }
+        }
+      }
+    },
+    "/user/": {
+      "get": {
+        "summary": "Buscar todos os usuários",
+        "description": "Rota que retorna todos os usuários cadastrados no sistema",
+        "tags": ["User"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": { "description": "Token inválido" },
+          "500": { "description": "Erro interno do servidor" }
+        }
+      }
+    },
+    "/user/update/{id}": {
+      "put": {
+        "summary": "Atualizar usuário",
+        "description": "Rota para atualizar informações do usuário",
+        "tags": ["User"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do usuário",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": { "type": "string" },
+                  "email": { "type": "string" },
+                  "password": { "type": "string" },
+                  "confirmPassword": { "type": "string" }
+                }
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "username": "Messi",
+                    "email": "messi@barcelona.com",
+                    "password": "melhordomundo",
+                    "confirmPassword": "melhordomundo"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Usuário atualizado com sucesso" },
+          "401": { "description": "Token inválido" },
+          "404": { "description": "Usuário não encontrado" },
+          "422": {
+            "description": "Username, Email ou Senha não foram informados"
+          },
+          "403": {
+            "description": "Você não pode atualizar outro usuário (Token precisa corresponder com ID do User)"
+          },
+          "409": {
+            "description": "O email já está em uso ou a senha não é a mesma"
+          },
+          "500": { "description": "Erro interno do servidor" }
+        }
+      }
+    },
+    "/user/delete/{id}": {
+      "delete": {
+        "summary": "Deletar usuário",
+        "description": "Rota para deletar usuário do banco de dados",
+        "tags": ["User"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do usuário",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": { "description": "Usuário deletado com sucesso" },
+          "401": { "description": "Token inválido" },
+          "404": { "description": "Usuário não encontrado" },
+          "403": {
+            "description": "Você não tem acesso a este usuário (Token precisa corresponder com ID do User)"
+          },
+          "500": { "description": "Erro interno do servidor" }
+        }
+      }
+    },
+    "/arena/create": {
+      "post": {
+        "summary": "Adicionar arena",
+        "description": "Rota para adicionar nova arena",
+        "tags": ["Arena"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "name": { "type": "string" },
+                  "contact": { "type": "string" },
+                  "address": { "type": "string" },
+                  "price": { "type": "number" },
+                  "description": { "type": "object" },
+                  "schedule": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "hour": { "type": "string", "format": "date-time" },
+                        "available": { "type": "boolean" }
+                      }
+                    }
+                  }
+                }
+              },
+              "examples": {
+                "arena": {
+                  "value": {
+                    "name": "Spotify Camp Nou",
+                    "contact": "(99) 999999999",
+                    "address": "Av. de Joan XXIII, 1, 08001 Barcelona",
+                    "price": 10000000,
+                    "description": "Estádio de futebol localizado na cidade de Barcelona, na Catalunha, na Espanha. É a casa do clube FC Barcelona da La Liga desde 1957.",
+                    "schedule": [
+                      {
+                        "hour": "2024-07-09T19:30:00Z",
+                        "available": true
+                      },
+                      {
+                        "hour": "2024-07-09T19:30:00Z",
+                        "available": true
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Arena criada com sucesso" },
+          "422": { "description": "Algum dado obrigatório não foi informado" },
+          "409": { "description": "A hora precisa ser uma data" },
+          "401": { "description": "Token inválido" }
+        }
+      }
+    },
+    "/arena/{id}": {
+      "get": {
+        "summary": "Buscar todas as arenas",
+        "description": "Rota que retorna todas as arenas cadastradas",
+        "tags": ["Arena"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do usuário",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Arena"
+                }
+              }
+            }
+          },
+          "401": {"description": "Token inválido"},
+          "404": {"description": "Arena não encontrada"},
+          "500": {"description": "Erro interno do servidor"}
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "username": { "type": "string" },
+          "email": { "type": "string" },
+          "password": { "type": "string" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Arena": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "contact": { "type": "string" },
+          "address": { "type": "string" },
+          "price": { "type": "number" },
+          "description": { "type": "string" },
+          "schedule": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/Schedule"
+            }
+          },
+          "owner": { "type": "object", "$ref": "#/components/schemas/User" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Schedule": {
+        "type": "object",
+        "properties": {
+          "hour": { "type": "string", "format": "date-time" },
+          "available": { "type": "boolean" },
+          "lessee": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/User" }
+          },
+          "id": { "type": "string" }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "barerFormat": "JWT"
+      }
+    }
+  }
+}

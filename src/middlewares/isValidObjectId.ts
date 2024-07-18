@@ -6,7 +6,7 @@ export const isValidId = (req: Request, res: Response, next: NextFunction) => {
   const id = req.params.id;
 
   if (!isValidObjectId(id)) {
-    return res.status(StatusCodes.NOT_FOUND).json({ msg: "User not found" });
+    return res.status(StatusCodes.NOT_FOUND).json({ msg: "Not found" });
   }
 
   next();

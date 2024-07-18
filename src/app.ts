@@ -1,11 +1,14 @@
 import c from "config";
 import express from "express";
+import swaggerUi from "swagger-ui-express";
+import swaggerDocument from "./swagger.json";
 import { connection } from "../config/db";
 import { UserRoutes } from "./routes/User.routes";
-const app = express();
-import crypo from "crypto";
 import { ArenaRoutes } from "./routes/Arena.routes";
+const app = express();
 app.use(express.json());
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use("/user/", UserRoutes);
 app.use("/arena/", ArenaRoutes);
