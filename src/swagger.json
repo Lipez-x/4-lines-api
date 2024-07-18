@@ -296,8 +296,8 @@
     },
     "/arena/{id}": {
       "get": {
-        "summary": "Buscar todas as arenas",
-        "description": "Rota que retorna todas as arenas cadastradas",
+        "summary": "Buscar arena por ID",
+        "description": "Rota para buscar arenas utilizando o seu ID",
         "tags": ["Arena"],
         "parameters": [
           {
@@ -315,6 +315,45 @@
                 "schema": {
                   "type": "object",
                   "$ref": "#/components/schemas/Arena"
+                }
+              }
+            }
+          },
+          "401": {"description": "Token inválido"},
+          "404": {"description": "Arena não encontrada"},
+          "500": {"description": "Erro interno do servidor"}
+        }
+      }
+    },
+    "/arena/": {
+      "get": {
+        "summary": "Buscar todas as arenas",
+        "description": "Rota que retorna todas arenas registradas",
+        "tags": ["Arena"],
+        "responses": {
+          "200": {"description": "OK", "content": {
+            "application/json": {
+              "schema": {"type": "object", "$ref":"#/components/schemas/Arena"}
+            }
+          }},
+          "401": {"description": "Token inválido"},
+          "500": {"description": "Erro interno do servidor"}
+        }
+      }
+    },
+    "/arena/myarena": {
+      "get": {
+        "summary": "Buscar arenas do usuário",
+        "description": "Rota para retornar todas as arenas cadastradas pelo usuário via verificação do Token JWT",
+        "tags": ["Arena"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {"$ref": "#/components/schemas/Arena"}
                 }
               }
             }
