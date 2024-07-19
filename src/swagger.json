@@ -503,6 +503,56 @@
           "500": {"description": "Erro interno do servidor"}
         }
       }
+    },
+    "/arena/complete/{id}/{hourId}": {
+      "put": {
+        "summary": "Encerrar aluguel",
+        "description": "Rota para concluir aluguel e deixar horário disponível novamente",
+        "tags": ["Arena"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID da arena",
+            "required": true
+          },
+          {
+            "name": "hourId",
+            "in": "path",
+            "description": "ID do horário",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {"description": "Aluguel encerrado com sucesso"},
+          "401": {"description": "Token inválido"},
+          "404": {"description": "Arena ou horário não encontrado"},
+          "403": {"description": "Você não pode encerrar alugueis da arena de outro usuário (Id do dono da arena incompátivel com o id retornado pelo token)"},
+          "500": {"description": "Erro interno do servidor"}
+        }
+      }
+    },
+    "/arena/delete/{id}": {
+      "delete": {
+        "summary": "Deletar arena",
+        "description": "Rota para deletar uma arena",
+        "tags": ["Arena"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID da arena",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {"description": "Arena deletada com sucesso"},
+          "401": {"description": "Token inválido"},
+          "404": {"description": "Arena não encontrada"},
+          "403": {"description": "Você não pode deletar a arena de outro usuário"},
+          "500": {"description": "Erro interno do servidor"}
+        }
+      }
     }
   },
   "components": {
@@ -556,7 +606,7 @@
       "bearerAuth": {
         "type": "http",
         "scheme": "bearer",
-        "barerFormat": "JWT"
+        "bearerFormat": "JWT"
       }
     }
   }

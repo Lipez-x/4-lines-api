@@ -247,7 +247,7 @@ export default class ArenaController {
     const arena = await Arena.findById(id);
 
     if (!arena) {
-      return res.status(StatusCodes.NOT_FOUND).json({ msg: "Arena not foun" });
+      return res.status(StatusCodes.NOT_FOUND).json({ msg: "Arena not found" });
     }
 
     const token = GetToken(req);
