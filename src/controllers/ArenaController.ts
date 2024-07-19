@@ -81,7 +81,9 @@ export default class ArenaController {
         .status(StatusCodes.CREATED)
         .json({ msg: "Arena created with successfully" });
     } catch (error) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ msg: error });
+      return res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ msg: "Failed to create arena" });
     }
   }
 
@@ -194,7 +196,7 @@ export default class ArenaController {
 
   async acceptRequest(req: Request, res: Response) {
     const id = req.params.id;
-    const hourdId = req.params.hourId;
+    const hourId = req.params.hourId;
     const lesseeId = req.params.lesseeId;
 
     const arena = await Arena.findById(id);
@@ -215,7 +217,7 @@ export default class ArenaController {
 
     try {
       const acceptHour = arena.schedule.map((schedule) => {
-        if (schedule.id === hourdId) {
+        if (schedule.id === hourId) {
           schedule.available = false;
           const lesseeAccepted = schedule.lessee.filter(
             (lessee) => lessee.id === lesseeId
@@ -255,7 +257,7 @@ export default class ArenaController {
 
   async completeRental(req: Request, res: Response) {
     const id = req.params.id;
-    const hourdId = req.params.hourId;
+    const hourId = req.params.hourId;
 
     const arena = await Arena.findById(id);
 
@@ -276,7 +278,7 @@ export default class ArenaController {
 
     try {
       const verifySchema = arena.schedule.map((schedule) => {
-        if (schedule.id === hourdId) {
+        if (schedule.id === hourId) {
           schedule.available = true;
           schedule.lessee.length = 0;
           return true;
@@ -388,7 +390,7 @@ export default class ArenaController {
       await Arena.findByIdAndDelete(id);
       return res
         .status(StatusCodes.OK)
-        .json({ msg: "Arena successfully deleted" });
+        .json({ msg: "Arena deleted successfully" });
     } catch (error) {
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
