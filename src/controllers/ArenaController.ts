@@ -148,6 +148,19 @@ export default class ArenaController {
 
       const user = new User(userByToken);
 
+      const availableSchedule = arena.schedule.map((schedule) => {
+        if (schedule._id?.equals(hourId) && schedule.available === false) {
+          return false;
+        }
+        return true;
+      });
+
+      if (availableSchedule.includes(false)) {
+        return res
+          .status(StatusCodes.FORBIDDEN)
+          .json({ msg: "This schedule is not available" });
+      }
+
       const newSchedule = arena.schedule.map((schedule) => {
         if (
           schedule.id === hourId &&

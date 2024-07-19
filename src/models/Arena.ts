@@ -21,7 +21,7 @@ const ArenaSchema = new Schema(
     address: { type: Schema.Types.String, required: true },
     price: { type: Schema.Types.Number, required: true },
     description: { type: Schema.Types.String, required: true },
-    schedule: { type: [ScheduleSchema] },
+    schedule: { type: [ScheduleSchema], default: [] },
     owner: { type: UserSchema, required: true },
   },
   {
