@@ -440,6 +440,33 @@
           "500": {"description": "Erro interno do servidor"}
         }
       }
+    },
+    "/arena/{id}/{hourId}": {
+      "put": {
+        "summary": "Solicitar aluguel",
+        "description": "Rota para solicitar o aluguel de um horário em uma arena",
+        "tags": ["Arena"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID da arena",
+            "required": true 
+          },
+          {
+            "name": "hourId",
+            "in":"path",
+            "description": "ID do horário",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {"description": "Solicitação enviada"},
+          "401": {"description": "Token inválido"},
+          "404": {"description": "Arena ou horário não encontrado"},
+          "500": {"description": "Erro interno do servidor"}
+        }
+      }
     }
   },
   "components": {
