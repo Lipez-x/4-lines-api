@@ -431,13 +431,15 @@
           }
         },
         "responses": {
-          "200": {"description": "Arena atualizada com sucesso"},
-          "401": {"description": "Token inválido"},
-          "422": {"description": "Algum dado obrigatório não foi informado"},
-          "404": {"description": "Arena não encontrada"},
-          "409": {"description": "A hora precisa estar no formato de data"},
-          "403": {"description": "Você não pode atualizar uma arena de outro usuário (Id do dono da arena incompátivel com o id retornado pelo token)"},
-          "500": {"description": "Erro interno do servidor"}
+          "200": { "description": "Arena atualizada com sucesso" },
+          "401": { "description": "Token inválido" },
+          "422": { "description": "Algum dado obrigatório não foi informado" },
+          "404": { "description": "Arena não encontrada" },
+          "409": { "description": "A hora precisa estar no formato de data" },
+          "403": {
+            "description": "Você não pode atualizar uma arena de outro usuário (Id do dono da arena incompátivel com o id retornado pelo token)"
+          },
+          "500": { "description": "Erro interno do servidor" }
         }
       }
     },
@@ -451,19 +453,53 @@
             "name": "id",
             "in": "path",
             "description": "ID da arena",
-            "required": true 
+            "required": true
           },
           {
             "name": "hourId",
-            "in":"path",
+            "in": "path",
             "description": "ID do horário",
             "required": true
           }
         ],
         "responses": {
-          "200": {"description": "Solicitação enviada"},
+          "200": { "description": "Solicitação enviada" },
+          "401": { "description": "Token inválido" },
+          "404": { "description": "Arena ou horário não encontrado" },
+          "500": { "description": "Erro interno do servidor" }
+        }
+      }
+    },
+    "/arena/accept/{id}/{hourId}/{lesseeId}": {
+      "put": {
+        "summary": "Aceitar solicitação",
+        "description": "Rota para aceitar solicitação de aluguel de horário em uma arena do usuário",
+        "tags": ["Arena"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID da arena",
+            "required": true
+          },
+          {
+            "name": "hourId",
+            "in": "path",
+            "description": "ID do horário",
+            "required": true
+          },
+          {
+            "name": "lesseeId",
+            "in": "path",
+            "description": "Id do solicitador",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {"description": "Solicitação aceita com sucesso"},
           "401": {"description": "Token inválido"},
           "404": {"description": "Arena ou horário não encontrado"},
+          "403": {"description": "Você não pode aceitar solicitações da arena de outro usuário (Id do dono da arena incompátivel com o id retornado pelo token)"},
           "500": {"description": "Erro interno do servidor"}
         }
       }
