@@ -265,7 +265,7 @@
               "examples": {
                 "arena": {
                   "value": {
-                    "name": "Spotify Camp Nou",
+                    "name": "Camp Nou",
                     "contact": "(99) 999999999",
                     "address": "Av. de Joan XXIII, 1, 08001 Barcelona",
                     "price": 10000000,
@@ -319,9 +319,9 @@
               }
             }
           },
-          "401": {"description": "Token inválido"},
-          "404": {"description": "Arena não encontrada"},
-          "500": {"description": "Erro interno do servidor"}
+          "401": { "description": "Token inválido" },
+          "404": { "description": "Arena não encontrada" },
+          "500": { "description": "Erro interno do servidor" }
         }
       }
     },
@@ -331,13 +331,19 @@
         "description": "Rota que retorna todas arenas registradas",
         "tags": ["Arena"],
         "responses": {
-          "200": {"description": "OK", "content": {
-            "application/json": {
-              "schema": {"type": "object", "$ref":"#/components/schemas/Arena"}
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Arena"
+                }
+              }
             }
-          }},
-          "401": {"description": "Token inválido"},
-          "500": {"description": "Erro interno do servidor"}
+          },
+          "401": { "description": "Token inválido" },
+          "500": { "description": "Erro interno do servidor" }
         }
       }
     },
@@ -353,13 +359,84 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": {"$ref": "#/components/schemas/Arena"}
+                  "items": { "$ref": "#/components/schemas/Arena" }
                 }
               }
             }
           },
+          "401": { "description": "Token inválido" },
+          "404": { "description": "Usuário não encontrado" },
+          "500": { "description": "Erro interno do servidor" }
+        }
+      }
+    },
+    "/arena/update/{id}": {
+      "put": {
+        "summary": "Atualizar arena",
+        "description": "Rota para atualizar informações da arena",
+        "tags": ["Arena"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do usuário",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "contact": { "type": "string" },
+                  "address": { "type": "string" },
+                  "price": { "type": "number" },
+                  "description": { "type": "object" },
+                  "schedule": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "hour": { "type": "string", "format": "date-time" },
+                        "available": { "type": "boolean" }
+                      }
+                    }
+                  }
+                }
+              },
+              "examples": {
+                "arena": {
+                  "value": {
+                    "name": "Spotify Camp Nou",
+                    "contact": "(99) 999999999",
+                    "address": "Av. de Joan XXIII, 1, 08001 Barcelona",
+                    "price": 10000000,
+                    "description": "Estádio de futebol localizado na cidade de Barcelona, na Catalunha, na Espanha. É a casa do clube FC Barcelona da La Liga desde 1957.",
+                    "schedule": [
+                      {
+                        "hour": "2024-07-09T19:30:00Z",
+                        "available": true
+                      },
+                      {
+                        "hour": "2024-07-09T19:30:00Z",
+                        "available": true
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {"description": "Arena atualizada com sucesso"},
           "401": {"description": "Token inválido"},
+          "422": {"description": "Algum dado obrigatório não foi informado"},
           "404": {"description": "Arena não encontrada"},
+          "409": {"description": "A hora precisa estar no formato de data"},
+          "403": {"description": "Você não pode atualizar uma arena de outro usuário (Id do dono da arena incompátivel com o id retornado pelo token)"},
           "500": {"description": "Erro interno do servidor"}
         }
       }
