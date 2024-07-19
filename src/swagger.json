@@ -105,6 +105,11 @@
     },
     "/user/{id}": {
       "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "summary": "Procurar usuário por ID",
         "description": "Rota para buscar usuários utilizando o ID",
         "tags": ["User"],
@@ -136,6 +141,11 @@
     },
     "/user/": {
       "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "summary": "Buscar todos os usuários",
         "description": "Rota que retorna todos os usuários cadastrados no sistema",
         "tags": ["User"],
@@ -158,6 +168,11 @@
     },
     "/user/update/{id}": {
       "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "summary": "Atualizar usuário",
         "description": "Rota para atualizar informações do usuário",
         "tags": ["User"],
@@ -213,6 +228,11 @@
     },
     "/user/delete/{id}": {
       "delete": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "summary": "Deletar usuário",
         "description": "Rota para deletar usuário do banco de dados",
         "tags": ["User"],
@@ -237,6 +257,11 @@
     },
     "/arena/create": {
       "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "summary": "Adicionar arena",
         "description": "Rota para adicionar nova arena",
         "tags": ["Arena"],
@@ -296,6 +321,11 @@
     },
     "/arena/{id}": {
       "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "summary": "Buscar arena por ID",
         "description": "Rota para buscar arenas utilizando o seu ID",
         "tags": ["Arena"],
@@ -327,6 +357,11 @@
     },
     "/arena/": {
       "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "summary": "Buscar todas as arenas",
         "description": "Rota que retorna todas arenas registradas",
         "tags": ["Arena"],
@@ -349,6 +384,11 @@
     },
     "/arena/myarena": {
       "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "summary": "Buscar arenas do usuário",
         "description": "Rota para retornar todas as arenas cadastradas pelo usuário via verificação do Token JWT",
         "tags": ["Arena"],
@@ -372,6 +412,11 @@
     },
     "/arena/update/{id}": {
       "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "summary": "Atualizar arena",
         "description": "Rota para atualizar informações da arena",
         "tags": ["Arena"],
@@ -445,6 +490,11 @@
     },
     "/arena/{id}/{hourId}": {
       "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "summary": "Solicitar aluguel",
         "description": "Rota para solicitar o aluguel de um horário em uma arena",
         "tags": ["Arena"],
@@ -472,6 +522,11 @@
     },
     "/arena/accept/{id}/{hourId}/{lesseeId}": {
       "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "summary": "Aceitar solicitação",
         "description": "Rota para aceitar solicitação de aluguel de horário em uma arena do usuário",
         "tags": ["Arena"],
@@ -496,16 +551,23 @@
           }
         ],
         "responses": {
-          "200": {"description": "Solicitação aceita com sucesso"},
-          "401": {"description": "Token inválido"},
-          "404": {"description": "Arena ou horário não encontrado"},
-          "403": {"description": "Você não pode aceitar solicitações da arena de outro usuário (Id do dono da arena incompátivel com o id retornado pelo token)"},
-          "500": {"description": "Erro interno do servidor"}
+          "200": { "description": "Solicitação aceita com sucesso" },
+          "401": { "description": "Token inválido" },
+          "404": { "description": "Arena ou horário não encontrado" },
+          "403": {
+            "description": "Você não pode aceitar solicitações da arena de outro usuário (Id do dono da arena incompátivel com o id retornado pelo token)"
+          },
+          "500": { "description": "Erro interno do servidor" }
         }
       }
     },
     "/arena/complete/{id}/{hourId}": {
       "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "summary": "Encerrar aluguel",
         "description": "Rota para concluir aluguel e deixar horário disponível novamente",
         "tags": ["Arena"],
@@ -524,16 +586,23 @@
           }
         ],
         "responses": {
-          "200": {"description": "Aluguel encerrado com sucesso"},
-          "401": {"description": "Token inválido"},
-          "404": {"description": "Arena ou horário não encontrado"},
-          "403": {"description": "Você não pode encerrar alugueis da arena de outro usuário (Id do dono da arena incompátivel com o id retornado pelo token)"},
-          "500": {"description": "Erro interno do servidor"}
+          "200": { "description": "Aluguel encerrado com sucesso" },
+          "401": { "description": "Token inválido" },
+          "404": { "description": "Arena ou horário não encontrado" },
+          "403": {
+            "description": "Você não pode encerrar alugueis da arena de outro usuário (Id do dono da arena incompátivel com o id retornado pelo token)"
+          },
+          "500": { "description": "Erro interno do servidor" }
         }
       }
     },
     "/arena/delete/{id}": {
       "delete": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "summary": "Deletar arena",
         "description": "Rota para deletar uma arena",
         "tags": ["Arena"],
@@ -546,11 +615,13 @@
           }
         ],
         "responses": {
-          "200": {"description": "Arena deletada com sucesso"},
-          "401": {"description": "Token inválido"},
-          "404": {"description": "Arena não encontrada"},
-          "403": {"description": "Você não pode deletar a arena de outro usuário"},
-          "500": {"description": "Erro interno do servidor"}
+          "200": { "description": "Arena deletada com sucesso" },
+          "401": { "description": "Token inválido" },
+          "404": { "description": "Arena não encontrada" },
+          "403": {
+            "description": "Você não pode deletar a arena de outro usuário"
+          },
+          "500": { "description": "Erro interno do servidor" }
         }
       }
     }
