@@ -18,7 +18,7 @@
     "/user/create": {
       "post": {
         "summary": "Cadastro de usuário",
-        "description": "Rota para o o usuário se cadastrar no sistema",
+        "description": "Endpoint para o usuário se cadastrar no sistema.",
         "tags": ["User"],
         "requestBody": {
           "content": {
@@ -59,7 +59,7 @@
     "/user/login": {
       "post": {
         "summary": "Login",
-        "description": "Rota para gerar o token de autentificação JWT",
+        "description": "Endpoint para gerar token de autenticação JWT, que concede acesso às demais rotas protegidas da aplicação.",
         "tags": ["User"],
         "requestBody": {
           "content": {
@@ -111,7 +111,7 @@
           }
         ],
         "summary": "Procurar usuário por ID",
-        "description": "Rota para buscar usuários utilizando o ID",
+        "description": "Endpoint para buscar usuários pelo ID, utilizada para obter informações de um usuário específico.",
         "tags": ["User"],
         "parameters": [
           {
@@ -147,7 +147,7 @@
           }
         ],
         "summary": "Buscar todos os usuários",
-        "description": "Rota que retorna todos os usuários cadastrados no sistema",
+        "description": "Endpoint para retornar todos os usuários cadastrados no sistema.",
         "tags": ["User"],
         "responses": {
           "200": {
@@ -174,7 +174,7 @@
           }
         ],
         "summary": "Atualizar usuário",
-        "description": "Rota para atualizar informações do usuário",
+        "description": "Endpoint para atualizar informações do usuário, utilizada para modificar dados de um usuário existente.",
         "tags": ["User"],
         "parameters": [
           {
@@ -234,7 +234,7 @@
           }
         ],
         "summary": "Deletar usuário",
-        "description": "Rota para deletar usuário do banco de dados",
+        "description": "Endpoint para deletar usuário.",
         "tags": ["User"],
         "parameters": [
           {
@@ -263,7 +263,7 @@
           }
         ],
         "summary": "Adicionar arena",
-        "description": "Rota para adicionar nova arena",
+        "description": "Endpoint para adicionar nova arena no sistema.",
         "tags": ["Arena"],
         "requestBody": {
           "content": {
@@ -327,7 +327,7 @@
           }
         ],
         "summary": "Buscar arena por ID",
-        "description": "Rota para buscar arenas utilizando o seu ID",
+        "description": "Endpoint para buscar arenas com o ID, utilizada para obter informações específicas de uma arena.",
         "tags": ["Arena"],
         "parameters": [
           {
@@ -362,8 +362,8 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Buscar todas as arenas",
-        "description": "Rota que retorna todas arenas registradas",
+        "summary": "Buscar todas as arenas.",
+        "description": "Endpoint que retorna todas arenas registradas",
         "tags": ["Arena"],
         "responses": {
           "200": {
@@ -390,7 +390,7 @@
           }
         ],
         "summary": "Buscar arenas do usuário",
-        "description": "Rota para retornar todas as arenas cadastradas pelo usuário via verificação do Token JWT",
+        "description": "Endpoint para retornar todas as arenas cadastradas pelo usuário, utilizando a verificação do Token JWT.",
         "tags": ["Arena"],
         "responses": {
           "200": {
@@ -418,7 +418,7 @@
           }
         ],
         "summary": "Atualizar arena",
-        "description": "Rota para atualizar informações da arena",
+        "description": "Endpoint para atualizar informações de uma arena.",
         "tags": ["Arena"],
         "parameters": [
           {
@@ -496,7 +496,7 @@
           }
         ],
         "summary": "Solicitar aluguel",
-        "description": "Rota para solicitar o aluguel de um horário em uma arena",
+        "description": "Endpoint para solicitar o aluguel de um horário em uma arena, adicionando o usuário à lista de solicitações de locatários, onde ele aguardará a confirmação do aluguel.",
         "tags": ["Arena"],
         "parameters": [
           {
@@ -515,6 +515,7 @@
         "responses": {
           "200": { "description": "Solicitação enviada" },
           "401": { "description": "Token inválido" },
+          "403": {"description": "Este horário não está disponível"},
           "404": { "description": "Arena ou horário não encontrado" },
           "500": { "description": "Erro interno do servidor" }
         }
@@ -528,7 +529,7 @@
           }
         ],
         "summary": "Aceitar solicitação",
-        "description": "Rota para aceitar solicitação de aluguel de horário em uma arena do usuário",
+        "description": "Endpoint para aceitar uma solicitação de aluguel de um horário em uma arena. Esta ação remove todas as outras solicitações da lista de locatários e torna o horário indisponível.",
         "tags": ["Arena"],
         "parameters": [
           {
@@ -569,7 +570,7 @@
           }
         ],
         "summary": "Encerrar aluguel",
-        "description": "Rota para concluir aluguel e deixar horário disponível novamente",
+        "description": "Endpoint para concluir o aluguel. Esta ação esvazia a lista de solicitações e torna o horário disponível novamente.",
         "tags": ["Arena"],
         "parameters": [
           {
@@ -604,7 +605,7 @@
           }
         ],
         "summary": "Deletar arena",
-        "description": "Rota para deletar uma arena",
+        "description": "Endpoint para deletar uma arena.",
         "tags": ["Arena"],
         "parameters": [
           {
