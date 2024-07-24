@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "4 Lines API",
-    "description": "This API was developed to optimize and simplify the process of scheduling sports arenas. It serves both arena owners and interested customers, providing a more efficient and practical experience for both parties.",
+    "description": "Esta API foi desenvolvida para otimizar e facilitar o processo de agendamento de arenas esportivas. Ela atende tanto aos proprietários das arenas quanto aos clientes interessados, proporcionando uma experiência mais eficiente e prática para ambas as partes.",
     "contact": {
       "email": "ifelipelima.dev@gmail.com"
     },
@@ -17,8 +17,8 @@
   "paths": {
     "/user/create": {
       "post": {
-        "summary": "User registration",
-        "description": "Endpoint for user registration in the system.",
+        "summary": "Cadastro de usuário",
+        "description": "Endpoint para o usuário se cadastrar no sistema.",
         "tags": ["User"],
         "requestBody": {
           "content": {
@@ -46,20 +46,20 @@
         },
         "responses": {
           "422": {
-            "description": "Username, Email or Password were not provided."
+            "description": "Username, Email ou Senha não foram informados"
           },
           "409": {
-            "description": "This email is already in use or the password is not the same"
+            "description": "O email já está em uso ou a senha não é a mesma"
           },
-          "201": { "description": "User criated successfully" },
-          "500": { "description": "Internal server error" }
+          "201": { "description": "Usuário criado com sucesso" },
+          "500": { "description": "Erro interno do servidor" }
         }
       }
     },
     "/user/login": {
       "post": {
         "summary": "Login",
-        "description": "Endpoint to generate JWT authentication token, which grants access to other protected routes in the application.",
+        "description": "Endpoint para gerar token de autenticação JWT, que concede acesso às demais rotas protegidas da aplicação.",
         "tags": ["User"],
         "requestBody": {
           "content": {
@@ -96,10 +96,10 @@
               }
             }
           },
-          "409": { "description": "Email or password were not provided." },
-          "404": { "description": "User not found" },
-          "401": { "description": "Invalid password" },
-          "500": { "description": "Internal server error" }
+          "409": { "description": "Email ou senha não foram informados." },
+          "404": { "description": "Usuário não encontrado" },
+          "401": { "description": "Senha inválida" },
+          "500": { "description": "Erro interno do servidor" }
         }
       }
     },
@@ -110,14 +110,14 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Find user by ID",
-        "description": "Endpoint to find users by ID, used for get informations de um usuário específico.",
+        "summary": "Procurar usuário por ID",
+        "description": "Endpoint para buscar usuários pelo ID, utilizada para obter informações de um usuário específico.",
         "tags": ["User"],
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "User ID",
+            "description": "ID do usuário",
             "required": true
           }
         ],
@@ -133,9 +133,9 @@
               }
             }
           },
-          "404": { "description": "User not found" },
-          "401": { "description": "Invalid Token" },
-          "500": { "description": "Internal server error" }
+          "404": { "description": "Usuário não encontrado" },
+          "401": { "description": "Token inválido" },
+          "500": { "description": "Erro interno do servidor" }
         }
       }
     },
@@ -146,8 +146,8 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Find all users",
-        "description": "Endpoint to return all users addded in the system.",
+        "summary": "Buscar todos os usuários",
+        "description": "Endpoint para retornar todos os usuários cadastrados no sistema.",
         "tags": ["User"],
         "responses": {
           "200": {
@@ -161,8 +161,8 @@
               }
             }
           },
-          "401": { "description": "Invalid Token" },
-          "500": { "description": "Internal server error" }
+          "401": { "description": "Token inválido" },
+          "500": { "description": "Erro interno do servidor" }
         }
       }
     },
@@ -173,8 +173,8 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Update user",
-        "description": "Endpoint for updating user information, used to modify data for an existing user",
+        "summary": "Atualizar usuário",
+        "description": "Endpoint para atualizar informações do usuário, utilizada para modificar dados de um usuário existente.",
         "tags": ["User"],
         "parameters": [
           {
@@ -201,8 +201,8 @@
                   "value": {
                     "username": "Messi",
                     "email": "messi@barcelona.com",
-                    "password": "thebest",
-                    "confirmPassword": "thebest"
+                    "password": "melhordomundo",
+                    "confirmPassword": "melhordomundo"
                   }
                 }
               }
@@ -210,19 +210,19 @@
           }
         },
         "responses": {
-          "200": { "description": "Updated user successfully" },
-          "401": { "description": "Invalid Token" },
-          "404": { "description": "Usuário not found" },
+          "200": { "description": "Usuário atualizado com sucesso" },
+          "401": { "description": "Token inválido" },
+          "404": { "description": "Usuário não encontrado" },
           "422": {
-            "description": "Username, Email or Password were not provided."
+            "description": "Username, Email ou Senha não foram informados"
           },
           "403": {
-            "description": "You can not update other user (The token must match the user ID)"
+            "description": "Você não pode atualizar outro usuário (Token precisa corresponder com ID do User)"
           },
           "409": {
-            "description": "This email is already in use or the password is not the same"
+            "description": "O email já está em uso ou a senha não é a mesma"
           },
-          "500": { "description": "Internal server error" }
+          "500": { "description": "Erro interno do servidor" }
         }
       }
     },
@@ -233,8 +233,8 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Delete user",
-        "description": "Endpoint to delete user.",
+        "summary": "Deletar usuário",
+        "description": "Endpoint para deletar usuário.",
         "tags": ["User"],
         "parameters": [
           {
@@ -245,13 +245,13 @@
           }
         ],
         "responses": {
-          "200": { "description": "User deleted successfully" },
-          "401": { "description": "Invalid Token" },
-          "404": { "description": "User not found" },
+          "200": { "description": "Usuário deletado com sucesso" },
+          "401": { "description": "Token inválido" },
+          "404": { "description": "Usuário não encontrado" },
           "403": {
-            "description": "You do not have access to this user (The token must match the user ID)"
+            "description": "Você não tem acesso a este usuário (Token precisa corresponder com ID do User)"
           },
-          "500": { "description": "Internal server error" }
+          "500": { "description": "Erro interno do servidor" }
         }
       }
     },
@@ -262,8 +262,8 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Add Arena",
-        "description": "Endpoint to add new arena to the system.",
+        "summary": "Adicionar arena",
+        "description": "Endpoint para adicionar nova arena no sistema.",
         "tags": ["Arena"],
         "requestBody": {
           "content": {
@@ -294,7 +294,7 @@
                     "contact": "(99) 999999999",
                     "address": "Av. de Joan XXIII, 1, 08001 Barcelona",
                     "price": 10000000,
-                    "description": "Football stadium located in the city of Barcelona, Catalonia, Spain. It has been the home of La Liga's FC Barcelona since 1957.",
+                    "description": "Estádio de futebol localizado na cidade de Barcelona, na Catalunha, na Espanha. É a casa do clube FC Barcelona da La Liga desde 1957.",
                     "schedule": [
                       {
                         "hour": "2024-07-09T19:30:00Z",
@@ -312,10 +312,10 @@
           }
         },
         "responses": {
-          "201": { "description": "Arena added successfully" },
-          "422": { "description": "Some mandatory data was not provided" },
-          "409": { "description": "The time must be a date" },
-          "401": { "description": "Invalid Token" }
+          "201": { "description": "Arena criada com sucesso" },
+          "422": { "description": "Algum dado obrigatório não foi informado" },
+          "409": { "description": "A hora precisa ser uma data" },
+          "401": { "description": "Token inválido" }
         }
       }
     },
@@ -326,14 +326,14 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Find arena by ID",
-        "description": "Endpoint to find arenas by ID, used to get information about an arena.",
+        "summary": "Buscar arena por ID",
+        "description": "Endpoint para buscar arenas com o ID, utilizada para obter informações específicas de uma arena.",
         "tags": ["Arena"],
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Arena ID",
+            "description": "ID da arena",
             "required": true
           }
         ],
@@ -349,9 +349,9 @@
               }
             }
           },
-          "401": { "description": "Invalid Token" },
-          "404": { "description": "Arena not found" },
-          "500": { "description": "Internal server error" }
+          "401": { "description": "Token inválido" },
+          "404": { "description": "Arena não encontrada" },
+          "500": { "description": "Erro interno do servidor" }
         }
       }
     },
@@ -362,8 +362,8 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Find all arenas.",
-        "description": "Endpoint to return all added arenas.",
+        "summary": "Buscar todas as arenas.",
+        "description": "Endpoint que retorna todas arenas registradas",
         "tags": ["Arena"],
         "responses": {
           "200": {
@@ -377,8 +377,8 @@
               }
             }
           },
-          "401": { "description": "Invalid Token" },
-          "500": { "description": "Internal server error" }
+          "401": { "description": "Token inválido" },
+          "500": { "description": "Erro interno do servidor" }
         }
       }
     },
@@ -389,8 +389,8 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Find user arenas",
-        "description": "Endpoint to return all registered arenas by user, using Token JWT verification.",
+        "summary": "Buscar arenas do usuário",
+        "description": "Endpoint para retornar todas as arenas cadastradas pelo usuário, utilizando a verificação do Token JWT.",
         "tags": ["Arena"],
         "responses": {
           "200": {
@@ -404,9 +404,9 @@
               }
             }
           },
-          "401": { "description": "Invalid Token" },
-          "404": { "description": "User not found" },
-          "500": { "description": "Internal server error" }
+          "401": { "description": "Token inválido" },
+          "404": { "description": "Usuário não encontrado" },
+          "500": { "description": "Erro interno do servidor" }
         }
       }
     },
@@ -417,14 +417,14 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Update arena",
-        "description": "Endpoint to update arena informations.",
+        "summary": "Atualizar arena",
+        "description": "Endpoint para atualizar informações de uma arena.",
         "tags": ["Arena"],
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Arena ID",
+            "description": "ID da arena",
             "required": true
           }
         ],
@@ -458,7 +458,7 @@
                     "contact": "(99) 999999999",
                     "address": "Av. de Joan XXIII, 1, 08001 Barcelona",
                     "price": 10000000,
-                    "description": "Football stadium located in the city of Barcelona, Catalonia, Spain. It has been the home of La Liga's FC Barcelona since 1957.",
+                    "description": "Estádio de futebol localizado na cidade de Barcelona, na Catalunha, na Espanha. É a casa do clube FC Barcelona da La Liga desde 1957.",
                     "schedule": [
                       {
                         "hour": "2024-07-09T19:30:00Z",
@@ -476,15 +476,15 @@
           }
         },
         "responses": {
-          "200": { "description": "Arena updated successfully" },
-          "401": { "description": "Invalid Token" },
-          "422": { "description": "Some mandatory data was not provided" },
-          "404": { "description": "Arena not found" },
-          "409": { "description": "The time must be a date" },
+          "200": { "description": "Arena atualizada com sucesso" },
+          "401": { "description": "Token inválido" },
+          "422": { "description": "Algum dado obrigatório não foi informado" },
+          "404": { "description": "Arena não encontrada" },
+          "409": { "description": "A hora precisa estar no formato de data" },
           "403": {
-            "description": "You can not update another user's arena (the owner ID does not match the ID returned by the token)"
+            "description": "Você não pode atualizar uma arena de outro usuário (Id do dono da arena incompátivel com o id retornado pelo token)"
           },
-          "500": { "description": "Internal server error" }
+          "500": { "description": "Erro interno do servidor" }
         }
       }
     },
@@ -495,29 +495,29 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Request rent",
-        "description": "Endpoint to request the rental of a time in an arena, adding the user to the list of renter requests, where they will wait for confirmation of the rental.",
+        "summary": "Solicitar aluguel",
+        "description": "Endpoint para solicitar o aluguel de um horário em uma arena, adicionando o usuário à lista de solicitações de locatários, onde ele aguardará a confirmação do aluguel.",
         "tags": ["Arena"],
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Arena ID",
+            "description": "ID da arena",
             "required": true
           },
           {
             "name": "hourId",
             "in": "path",
-            "description": "Schedule ID",
+            "description": "ID do horário",
             "required": true
           }
         ],
         "responses": {
-          "200": { "description": "Request send" },
-          "401": { "description": "Invalid Token" },
-          "403": { "description": "This time is not available" },
-          "404": { "description": "Arena or schedule is not found" },
-          "500": { "description": "Internal server error" }
+          "200": { "description": "Solicitação enviada" },
+          "401": { "description": "Token inválido" },
+          "403": {"description": "Este horário não está disponível"},
+          "404": { "description": "Arena ou horário não encontrado" },
+          "500": { "description": "Erro interno do servidor" }
         }
       }
     },
@@ -528,35 +528,37 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Accept request",
-        "description": "Endpoint to accept request to rent a schedule in an arena. This action removes other requests from the renter list and makes the schedule unavailable.",
+        "summary": "Aceitar solicitação",
+        "description": "Endpoint para aceitar uma solicitação de aluguel de um horário em uma arena. Esta ação remove todas as outras solicitações da lista de locatários e torna o horário indisponível.",
         "tags": ["Arena"],
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Arena ID",
+            "description": "ID da arena",
             "required": true
           },
           {
             "name": "hourId",
             "in": "path",
-            "description": "Schedule ID",
+            "description": "ID do horário",
             "required": true
           },
           {
             "name": "lesseeId",
             "in": "path",
-            "description": "Solicitor ID",
+            "description": "Id do solicitador",
             "required": true
           }
         ],
         "responses": {
-          "200": { "description": "Request accepted successfully" },
-          "401": { "description": "Invalid Token" },
-          "404": { "description": "Arena or schedule is not found" },
-          "403": {"description": "You can not accept requests another user's arena (The owner ID does not match the ID returned by the token"},
-          "500": { "description": "Internal server error" }
+          "200": { "description": "Solicitação aceita com sucesso" },
+          "401": { "description": "Token inválido" },
+          "404": { "description": "Arena ou horário não encontrado" },
+          "403": {
+            "description": "Você não pode aceitar solicitações da arena de outro usuário (Id do dono da arena incompátivel com o id retornado pelo token)"
+          },
+          "500": { "description": "Erro interno do servidor" }
         }
       }
     },
@@ -567,31 +569,31 @@
             "bearerAuth": []
           }
         ],
-        "summary": "End lease",
-        "description": "Endpoint to complete the rent. This action clears the requests list and makes the schedule available again.",
+        "summary": "Encerrar aluguel",
+        "description": "Endpoint para concluir o aluguel. Esta ação esvazia a lista de solicitações e torna o horário disponível novamente.",
         "tags": ["Arena"],
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Arena ID",
+            "description": "ID da arena",
             "required": true
           },
           {
             "name": "hourId",
             "in": "path",
-            "description": "Schedule ID",
+            "description": "ID do horário",
             "required": true
           }
         ],
         "responses": {
-          "200": { "description": "Rental completed successfulçy" },
-          "401": { "description": "Invalid Token" },
-          "404": { "description": "Arena or schedule is not found" },
+          "200": { "description": "Aluguel encerrado com sucesso" },
+          "401": { "description": "Token inválido" },
+          "404": { "description": "Arena ou horário não encontrado" },
           "403": {
-            "description": "You can not complete rent from another user's arena (The owner ID does not match the ID returned by the token)"
+            "description": "Você não pode encerrar alugueis da arena de outro usuário (Id do dono da arena incompátivel com o id retornado pelo token)"
           },
-          "500": { "description": "Internal server error" }
+          "500": { "description": "Erro interno do servidor" }
         }
       }
     },
@@ -602,25 +604,25 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Delete arena",
-        "description": "Endpoint to delete arena.",
+        "summary": "Deletar arena",
+        "description": "Endpoint para deletar uma arena.",
         "tags": ["Arena"],
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Arena ID",
+            "description": "ID da arena",
             "required": true
           }
         ],
         "responses": {
-          "200": { "description": "Delete arena sucessfully" },
-          "401": { "description": "Invalid Token" },
-          "404": { "description": "Arena not found" },
+          "200": { "description": "Arena deletada com sucesso" },
+          "401": { "description": "Token inválido" },
+          "404": { "description": "Arena não encontrada" },
           "403": {
-            "description": "You can not delete another user's arenas"
+            "description": "Você não pode deletar a arena de outro usuário"
           },
-          "500": { "description": "Internal server error" }
+          "500": { "description": "Erro interno do servidor" }
         }
       }
     }
