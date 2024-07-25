@@ -8,6 +8,7 @@ import moment from "moment";
 import { User } from "../models/User";
 import { Types } from "mongoose";
 import { UserPayload } from "../interfaces/UserPayload";
+import { scheduler } from "timers/promises";
 
 function verifyArenaData({
   name,
@@ -163,11 +164,21 @@ export default class ArenaController {
           .json({ msg: "This schedule is not available" });
       }
 
+      const requestAlreadySend = arena.schedule.map((schedule) => {
+        if (schedule.lessee.some((schedule) => schedule._id.equals(user._id))) {
+          return false;
+        }
+        return true;
+      });
+
+      if (requestAlreadySend.includes(false)) {
+        return res
+          .status(StatusCodes.FORBIDDEN)
+          .json({ msg: "Request already send" });
+      }
+
       const newSchedule = arena.schedule.map((schedule) => {
-        if (
-          schedule.id === hourId &&
-          !schedule.lessee.some((lessee) => lessee._id.equals(user._id))
-        ) {
+        if (schedule.id === hourId) {
           schedule.lessee.push(user);
           return true;
         }
@@ -186,7 +197,9 @@ export default class ArenaController {
       };
 
       await Arena.findByIdAndUpdate(id, arenaUpdate);
-      return res.status(StatusCodes.OK).json({ msg: "Request sent" });
+      return res
+        .status(StatusCodes.OK)
+        .json({ msg: `Request sent, send a message from: ${arena.contact}` });
     } catch (error) {
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
