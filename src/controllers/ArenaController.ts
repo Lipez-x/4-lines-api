@@ -164,17 +164,17 @@ export default class ArenaController {
           .json({ msg: "This schedule is not available" });
       }
 
-      const requestAlreadySend = arena.schedule.map((schedule) => {
+      const requestAlreadySent = arena.schedule.map((schedule) => {
         if (schedule.lessee.some((schedule) => schedule._id.equals(user._id))) {
           return false;
         }
         return true;
       });
 
-      if (requestAlreadySend.includes(false)) {
+      if (requestAlreadySent.includes(false)) {
         return res
           .status(StatusCodes.FORBIDDEN)
-          .json({ msg: "Request already send" });
+          .json({ msg: "Request already sent" });
       }
 
       const newSchedule = arena.schedule.map((schedule) => {
