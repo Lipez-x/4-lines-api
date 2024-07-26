@@ -3,6 +3,7 @@ import ArenaController from "../controllers/ArenaController";
 import { verifyToken } from "../middlewares/verifyToken";
 import { isValidId } from "../middlewares/isValidObjectId";
 import { isOwner } from "../middlewares/isOwner";
+import { isClient } from "../middlewares/isClient";
 
 export const ArenaRoutes = Router();
 
@@ -16,6 +17,7 @@ ArenaRoutes.put(
   "/:id/:hourId",
   verifyToken,
   isValidId,
+  isClient,
   arenaController.requestRent
 );
 ArenaRoutes.put(
