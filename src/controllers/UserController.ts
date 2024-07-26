@@ -63,6 +63,7 @@ export default class UserController {
           username: user.username,
           email: user.email,
           password: user.password,
+          role: user.role,
         },
         secret,
         options
