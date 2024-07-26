@@ -8,7 +8,6 @@ import moment from "moment";
 import { User } from "../models/User";
 import { Types } from "mongoose";
 import { UserPayload } from "../interfaces/UserPayload";
-import { scheduler } from "timers/promises";
 
 function verifyArenaData({
   name,

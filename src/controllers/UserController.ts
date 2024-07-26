@@ -12,7 +12,7 @@ import { GetUserByToken } from "../helpers/get-user-token";
 
 config();
 
-function verifyUserData({ username, email, password }: UserInterface) {
+function verifyUserData({ username, email, password, role }: UserInterface) {
   if (!username) {
     return new Error("Username is mandatory");
   }
@@ -21,6 +21,9 @@ function verifyUserData({ username, email, password }: UserInterface) {
   }
   if (!password) {
     return new Error("Username is mandatory");
+  }
+  if (!role) {
+    return new Error("Role is mandatory");
   }
 }
 export default class UserController {
@@ -76,7 +79,7 @@ export default class UserController {
     }
   }
 
-  async createUser(req: Request, res: Response) {
+  async create(req: Request, res: Response) {
     const user: UserInterface = req.body;
     const confirmPassword: string = req.body.confirmPassword;
     const emailExists = await User.findOne({ email: user.email });

@@ -7,7 +7,7 @@ export const UserRoutes = Router();
 const userController = new UserController();
 
 UserRoutes.post("/login", userController.login);
-UserRoutes.post("/create", userController.createUser);
+UserRoutes.post("/create", userController.create);
 UserRoutes.get("/", verifyToken, userController.getAllUsers);
 UserRoutes.get("/:id", verifyToken, isValidId, userController.getUserById);
 UserRoutes.put("/update/:id", verifyToken, isValidId, userController.update);
